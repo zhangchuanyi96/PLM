@@ -2,6 +2,11 @@ Introduction
 ------------
 This is the source code for our paper **Peer-learning Network for Fine-Grained Recognition**
 
+Network Architecture
+--------------------
+The architecture of our proposed peer-learning model is as follows
+![network](network_architecture.png)
+
 Installation
 ------------
 After creating a virtual environment of python 3.5, run `pip install -r requirements.txt` to install all dependencies
