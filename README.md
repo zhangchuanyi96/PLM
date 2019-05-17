@@ -11,7 +11,7 @@ How to use
 The code is currently tested only on GPU
 * Data Preparation
 
-    Download data into PML root directory and uncompress them using
+    Download data into PLM root directory and uncompress them using
     ```
     wget https://web-fg-data.oss-cn-hongkong.aliyuncs.com/CUB200-WEB100.tar.gz
     wget https://web-fg-data.oss-cn-hongkong.aliyuncs.com/CUB200-WEB300.tar.gz
