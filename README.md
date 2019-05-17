@@ -23,14 +23,14 @@ The code is currently tested only on GPU
     tar -xvf CUB200-WEB100.tar.gz
     tar -xvf CUB200-WEB300.tar.gz
     ```
-    Training images in **CUB200-WEB100** and **CUB200-WEB100** are all crawled from the Internet while their test images are the test data in CUB200-2011.
-    **CUB200-WEB100** has 20000 training images in total while **CUB200-WEB100** has 58433 training images in total.
+    Training images in **CUB200-WEB100** and **CUB200-WEB300** are all crawled from the Internet while their test images are the test data in CUB200-2011.
+    **CUB200-WEB100** has 20000 training images in total while **CUB200-WEB300** has 58433 training images in total.
 
 * Demo
 
     - If you just want to do a quick test on the model and check the final fine-grained recognition performance, please follow subsequent steps
 
-      - Download one of the following trained model into `model/` using
+      - Download one of the following trained models into `model/` using
           ```
           wget https://web-fg-data.oss-cn-hongkong.aliyuncs.com/Model/WEB100-demo-79.12.pth
           wget https://web-fg-data.oss-cn-hongkong.aliyuncs.com/Model/WEB300-demo-89.11.pth
@@ -45,8 +45,8 @@ The code is currently tested only on GPU
       - Modify the model name in `cub200_demo.sh` according to the model downloaded.
       - Run demo using `bash cub200_demo.sh`
 
-    - If you want to de a quick test on the model of pair flipping noisy version of cifar10 / cifar100 dataset, please follow subsequent steps
-      - Download one of the following trained model into `cifar/model/` using
+    - If you want to do a quick test on the model of pair flipping noisy version of cifar10 / cifar100 dataset, please follow subsequent steps
+      - Download one of the following trained models into `cifar/model/` using
           ```
           wget https://web-fg-data.oss-cn-hongkong.aliyuncs.com/Model/cifar10_demo-77.40.pth
           wget https://web-fg-data.oss-cn-hongkong.aliyuncs.com/Model/cifar100_demo-34.46.pth
@@ -72,7 +72,7 @@ The code is currently tested only on GPU
           bash cub200_run.sh
           ```
 
-    - If you want to train on the cifar10 / cifar100 dataset, please follow subsequent steps
+    - If you want to train on the noisy cifar10 / cifar100 dataset, please follow subsequent steps
     
       - Go into `cifar` directory
       - Modify `CUDA_VISIBLE_DEVICES` to proper cuda device id in `cifar10_run.sh` or `cifar100_run.sh`
