@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 import torchvision.transforms as transforms
-from data.cifar import CIFAR10, CIFAR100
+from data.cifar import CIFAR10
 from model import CNN
 import argparse, sys
 import numpy as np
@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--bs', type = int, default = 128)
 parser.add_argument('--lr', type = float, default = 0.001)
 parser.add_argument('--T_k', type = int, default = 10, help='how many epochs for linear drop rate, can be 5, 10, 15.')
-parser.add_argument('--dataset', type = str, help = 'cifar10, or cifar100', default = 'cifar10')
+parser.add_argument('--dataset', type = str, help = 'cifar10', default = 'cifar10')
 parser.add_argument('--n_epoch', type=int, default=200)
 parser.add_argument('--print_freq', type=int, default=50)
 
@@ -57,25 +57,6 @@ if args.dataset=='cifar10':
                                 noise_type=noise_type,
                                 noise_rate=noise_rate
                           )
-
-if args.dataset=='cifar100':
-    input_channel=3
-    num_classes=100
-    train_dataset = CIFAR100(root='./data/',
-                                download=True,  
-                                train=True, 
-                                transform=transforms.ToTensor(),
-                                noise_type=noise_type,
-                                noise_rate=noise_rate
-                            )
-    
-    test_dataset = CIFAR100(root='./data/',
-                                download=True,  
-                                train=False, 
-                                transform=transforms.ToTensor(),
-                                noise_type=noise_type,
-                                noise_rate=noise_rate
-                            )
 
 noise_or_not = train_dataset.noise_or_not
 

@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 import torchvision.transforms as transforms
-from data.cifar import CIFAR10, CIFAR100
+from data.cifar import CIFAR10
 from model import CNN
 import argparse, sys
 import numpy as np
@@ -15,7 +15,7 @@ import shutil
 from loss_plm import peer_learning_loss
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type = str, help = 'cifar10, or cifar100', default = 'cifar10')
+parser.add_argument('--dataset', type = str, help = 'cifar10', default = 'cifar10')
 parser.add_argument('--model', type=str, required=True)
 args = parser.parse_args()
 
@@ -50,26 +50,6 @@ if args.dataset=='cifar10':
                                 noise_type=noise_type,
                                 noise_rate=noise_rate
                           )
-
-if args.dataset=='cifar100':
-    input_channel=3
-    num_classes=100
-    train_dataset = CIFAR100(root='./data/',
-                                download=True,  
-                                train=True, 
-                                transform=transforms.ToTensor(),
-                                noise_type=noise_type,
-                                noise_rate=noise_rate
-                            )
-    
-    test_dataset = CIFAR100(root='./data/',
-                                download=True,  
-                                train=False, 
-                                transform=transforms.ToTensor(),
-                                noise_type=noise_type,
-                                noise_rate=noise_rate
-                            )
-
 
 # Evaluate the Model
 def evaluate(test_loader, model):
