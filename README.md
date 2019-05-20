@@ -33,12 +33,12 @@ The code is currently tested only on GPU
       - Download one of the following trained models into `model/` using
           ```
           wget https://web-fg-data.oss-cn-hongkong.aliyuncs.com/Model/WEB100-demo-79.12.pth
-          wget https://web-fg-data.oss-cn-hongkong.aliyuncs.com/Model/WEB300-demo-89.11.pth
+          wget https://web-fg-data.oss-cn-hongkong.aliyuncs.com/Model/WEB300-demo-89.44.pth
           ```
           | Model                 | Description                                | Performance(%) |
           | --------------------- | ------------------------------------------ | -------------- |
           | WEB100-demo-79.12.pth | leveraged 100 web images for each category | 79.12          |
-          | WEB300-demo-89.11.pth | leveraged 300 web images for each category | 89.11          |
+          | WEB300-demo-89.44.pth | leveraged 300 web images for each category | 89.44          |
       - Create a soft link for data by `ln -s CUB200-WEB100 cub200`
       - Activate virtual environment (e.g. conda)
       - Modify `CUDA_VISIBLE_DEVICES` to proper cuda device id in `cub200_demo.sh` 
@@ -48,11 +48,11 @@ The code is currently tested only on GPU
     - If you want to do a quick test on the model of pair flipping noisy version of cifar10 dataset, please follow subsequent steps
       - Download the following trained model into `cifar/model/` using
           ```
-          wget https://web-fg-data.oss-cn-hongkong.aliyuncs.com/Model/cifar10_demo-77.40.pth
+          wget https://web-fg-data.oss-cn-hongkong.aliyuncs.com/Model/cifar10_demo-77.88.pth
           ```
           | Model                   | Description                                                                          | Performance(%) |
           | ----------------------- | ------------------------------------------------------------------------------------ | -------------- |
-          | cifar10_demo-77.40.pth  | trained from scratch on noisy cifar10 dataset (pair flipping with a noise rate 45%)  | 77.40          |
+          | cifar10_demo-77.88.pth  | trained from scratch on noisy cifar10 dataset (pair flipping with a noise rate 45%)  | 77.88          |
       - Activate virtual environment (e.g. conda)
       - Go into `cifar` directory
       - Modify `CUDA_VISIBLE_DEVICES` to proper cuda device id in `cifar10_demo.sh`, 
