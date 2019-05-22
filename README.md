@@ -14,7 +14,7 @@ After creating a virtual environment of python 3.5, run `pip install -r requirem
 How to use
 ------------
 The code is currently tested only on GPU
-* Data Preparation
+* **Data Preparation**
 
     Download data into PLM root directory and uncompress them using
     ```
@@ -29,7 +29,7 @@ The code is currently tested only on GPU
       <img src="datasets.png">
     </p>
 
-* Demo
+* **Demo**
 
     - If you just want to do a quick test on the model and check the final fine-grained recognition performance, please follow subsequent steps
 
@@ -62,7 +62,7 @@ The code is currently tested only on GPU
       - Modify the model name in `cifar10_demo.sh` according to the model downloaded.
       - Run demo using `cifar10_demo.sh`
 
-* Source Code
+* **Source Code**
 
     - If you want to train the whole network from begining using source code on the fine-grained dataset, please follow subsequent steps
     
