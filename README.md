@@ -23,8 +23,11 @@ The code is currently tested only on GPU
     tar -xvf CUB200-WEB100.tar.gz
     tar -xvf CUB200-WEB300.tar.gz
     ```
-    Training images in **CUB200-WEB100** and **CUB200-WEB300** are all crawled from the Internet while their test images are the test data in CUB200-2011.
-    **CUB200-WEB100** has 20000 training images in total while **CUB200-WEB300** has 58433 training images in total.
+    The training data in CUB200-WEB100 and CUB200-WEB300 are collected from the Google Image Search Engine, after performing PCA-based near-duplicate removal. The testing data is directly from the CUB200-2011 test data. The detailed informations of both CUB200-WEB100 and CUB200-WEB300 are shown belows:
+    <!-- ![datasets](datasets.png) -->
+    <p align="center">
+      <img src="datasets.png">
+    </p>
 
 * Demo
 
