@@ -5,7 +5,7 @@ This is the source code for our paper **Peer-learning Network for Fine-Grained R
 Network Architecture
 --------------------
 The architecture of our proposed peer-learning model is as follows
-![network](network_architecture.png)
+![network](asserts/network_architecture.png)
 
 Installation
 ------------
@@ -26,7 +26,7 @@ The code is currently tested only on GPU
     The training data in CUB200-WEB100 and CUB200-WEB300 are collected from the Google Image Search Engine, after performing PCA-based near-duplicate removal. The testing data is directly from the CUB200-2011 test data. The detailed informations of both CUB200-WEB100 and CUB200-WEB300 are shown belows:
     <!-- ![datasets](datasets.png) -->
     <p align="center">
-      <img src="datasets.png">
+      <img src="asserts/datasets.png">
     </p>
 
 * **Demo**
