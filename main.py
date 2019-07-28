@@ -13,6 +13,8 @@ import argparse
 from loss_plm import peer_learning_loss
 from lr_scheduler import lr_scheduler
 from bcnn import BCNN
+from vgg import VGG16, VGG19
+from resnet import ResNet18, ResNet34, ResNet50
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -33,6 +35,10 @@ parser.add_argument('--T_k', type=int, default=10,
 parser.add_argument('--weight_decay', type=float, default=1e-8)
 parser.add_argument('--step', type=int, default=None)
 parser.add_argument('--resume', action='store_true')
+parser.add_argument('--net1', type=str, default='bcnn',
+                    help='specify the network architecture, available options include bcnn, vgg16, vgg19, resnet18, resnet34, resnet50')
+parser.add_argument('--net2', type=str, default='bcnn',
+                    help='specify the network architecture, available options include bcnn, vgg16, vgg19, resnet18, resnet34, resnet50')
 
 args = parser.parse_args()
 
@@ -43,6 +49,36 @@ num_epochs = args.epoch
 drop_rate = args.drop_rate
 T_k = args.T_k
 weight_decay = args.weight_decay
+
+if args.net1 == 'bcnn':
+    NET1 = BCNN
+elif args.net1 == 'vgg16':
+    NET1 = VGG16
+elif args.net1 == 'vgg19':
+    NET1 = VGG19
+elif args.net1 == 'resnet18':
+    NET1 = ResNet18
+elif args.net1 == 'resnet34':
+    NET1 = ResNet34
+elif args.net1 == 'resnet50':
+    NET1 = ResNet50
+else:
+    raise AssertionError('net should be in bcnn, vgg16, vgg19, resnet18, resnet34, resnet50')
+
+if args.net2 == 'bcnn':
+    NET2 = BCNN
+elif args.net2 == 'vgg16':
+    NET2 = VGG16
+elif args.net2 == 'vgg19':
+    NET2 = VGG19
+elif args.net2 == 'resnet18':
+    NET2 = ResNet18
+elif args.net2 == 'resnet34':
+    NET2 = ResNet34
+elif args.net2 == 'resnet50':
+    NET2 = ResNet50
+else:
+    raise AssertionError('net should be in bcnn, vgg16, vgg19, resnet18, resnet34, resnet50')
 
 resume = args.resume
 
@@ -192,18 +228,18 @@ def main():
     print('===> About training in a two-step process! ===')
     if step == 1:
         print('===> Step 1 ...')
-        cot1 = BCNN(pretrained=True)
+        cot1 = NET1(pretrained=True)
         cot1 = nn.DataParallel(cot1).cuda()
         optimizer1 = optim.Adam(cot1.module.fc.parameters(), lr=learning_rate)
-        cot2 = BCNN(pretrained=True)
+        cot2 = NET2(pretrained=True)
         cot2 = nn.DataParallel(cot2).cuda()
         optimizer2 = optim.Adam(cot2.module.fc.parameters(), lr=learning_rate)
     elif step == 2:
         print('===> Step 2 ...')
-        cot1 = BCNN(pretrained=False)
+        cot1 = NET1(pretrained=False)
         cot1 = nn.DataParallel(cot1).cuda()
         optimizer1 = optim.Adam(cot1.parameters(), lr=learning_rate)
-        cot2 = BCNN(pretrained=False)
+        cot2 = NET2(pretrained=False)
         cot2 = nn.DataParallel(cot2).cuda()
         optimizer2 = optim.Adam(cot2.parameters(), lr=learning_rate)
     else:
