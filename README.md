@@ -81,3 +81,22 @@ The code is currently tested only on GPU
           ```
           bash cifar10_run.sh
           ```
+
+* **Using different network architectures in training**
+
+    <span style="color:blue"><b>(Updated on July 28, 2019)</b></span>
+
+    If you want to use different network architectures in the model, you can specify `--net1` and `--net2` when running `main.py`. 
+    
+    For example, if you want to train the model with `vgg16` and `resnet18`, you can modify the `cub200_run.sh` as follows:
+    ```
+    export CUDA_VISIBLE_DEVICES=0,1
+
+    python main.py --dataset cub200 --base_lr 1e-3 --batch_size 128 --epoch 200 --drop_rate 0.25 --T_k 10 --weight_decay 1e-8 --step 1 --net1 vgg16 --net2 resnet18
+
+    sleep 300
+
+    python main.py --dataset cub200 --base_lr 1e-4 --batch_size 64 --epoch 200 --drop_rate 0.25 --T_k 10 --weight_decay 1e-5 --step 2 --net1 vgg16 --net2 resnet18
+    ```
+
+    Currentlty, supported options for different network architectures include `bcnn`, `vgg16`, `vgg19`, `resnet18`, `resnet34` and `resnet50`.
