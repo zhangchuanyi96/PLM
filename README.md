@@ -100,3 +100,10 @@ The code is currently tested only on GPU
     ```
 
     Currentlty, supported options for different network architectures include `bcnn`, `vgg16`, `vgg19`, `resnet18`, `resnet34` and `resnet50`.
+
+    | Network1 Architecture | Network2 Architecture | Performance(%) |
+    | --------------------- | --------------------- | -------------- |
+    | VGG16                 | VGG19                 | 75.28          |
+    | VGG16                 | ResNet18              | 74.70          |
+    | ResNet18              | ResNet34              | 75.32          |
+    | ResNet34              | ResNet50              | 76.91          |
