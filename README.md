@@ -107,3 +107,13 @@ The code is currently tested only on GPU
     | VGG16                 | ResNet18              | 74.70          |
     | ResNet18              | ResNet34              | 75.32          |
     | ResNet34              | ResNet50              | 76.91          |
+
+* **Using three peer networks in training on cifar10 dataset**
+  
+  <span style="color:blue"><b>(Updated on July 31, 2019)</b></span>
+
+  If you want to using three peer networks while training the model, you can go into `cifar` directory, modify `CUDA_VISIBLE_DEVICES` to proper cuda device id in `cifar10_run_tri_peers.sh` and then run this script.
+
+    <p align="center">
+      <img src="asserts/cifar_results.png">
+    </p>

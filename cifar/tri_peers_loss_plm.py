@@ -1,0 +1,88 @@
+import torch 
+import torch.nn as nn
+import torch.nn.functional as F
+from torch.autograd import Variable
+import numpy as np
+
+# Loss functions
+def peer_learning_loss_A2B(logits_1, logits_2, labels, forget_rate, ind, noise_or_not):
+    dist_1 = F.softmax(logits_1, dim=1)
+    dist_2 = F.softmax(logits_2, dim=1)
+
+    _, pred_1 = dist_1.topk(1, dim=1, largest=True, sorted=True)  # (N, 1)
+    _, pred_2 = dist_2.topk(1, dim=1, largest=True, sorted=True)  # (N, 1)
+    pred_1 = pred_1.squeeze(dim=1)
+    pred_2 = pred_2.squeeze(dim=1)
+
+    disagreement_index = (pred_1 != pred_2).nonzero().squeeze(dim=1)  # (n)
+    agreement_index = (pred_1 == pred_2).nonzero().squeeze(dim=1)     # (N-n)
+    # print('----> disagree: {}, agree: {}'.format(disagreement_index.shape, agreement_index.shape))
+
+    logits_1_disagree = logits_1[disagreement_index]
+    logits_2_disagree = logits_2[disagreement_index]
+    labels_disagree = labels[disagreement_index]
+
+    logits_1_agree = logits_1[agreement_index]
+    logits_2_agree = logits_2[agreement_index]
+    labels_agree = labels[agreement_index]
+    
+    pure_ratio_1, pure_ratio_2 = 0., 0.
+
+    if agreement_index.shape[0] > 0:
+        loss_1_agree = F.cross_entropy(logits_1_agree, labels_agree, reduction='none')  # (N) loss per instance in this batch
+        ind_1_sorted = torch.argsort(loss_1_agree.data)  # (N) sorted index of the loss
+
+        loss_2_agree = F.cross_entropy(logits_2_agree, labels_agree, reduction='none')
+        ind_2_sorted = torch.argsort(loss_2_agree.data)
+
+        num_remember = int((1 - forget_rate) * loss_1_agree.shape[0])
+        
+        pure_ratio_1 = np.sum(noise_or_not[ind[ind_1_sorted[:num_remember].cpu().numpy()]])/float(num_remember)
+        pure_ratio_2 = np.sum(noise_or_not[ind[ind_2_sorted[:num_remember].cpu().numpy()]])/float(num_remember)
+
+        ind_1_update = ind_1_sorted[:num_remember]  # select the first num_remember low-loss instances
+        ind_2_update = ind_2_sorted[:num_remember]
+
+        if disagreement_index.shape[0] > 0:
+            logits_1_final = torch.cat((logits_1_disagree, logits_1_agree[ind_2_update]), dim=0)
+            labels_1_final = torch.cat((labels_disagree, labels_agree[ind_2_update]), dim=0)
+            logits_2_final = torch.cat((logits_2_disagree, logits_2_agree[ind_1_update]), dim=0)
+            labels_2_final = torch.cat((labels_disagree, labels_agree[ind_1_update]), dim=0)
+        else:
+            logits_1_final = logits_1_agree[ind_2_update]
+            labels_1_final = labels_agree[ind_2_update]
+            logits_2_final = logits_2_agree[ind_1_update]
+            labels_2_final = labels_agree[ind_1_update]
+
+    else:
+        logits_1_final = logits_1_disagree
+        labels_1_final = labels_disagree
+        logits_2_final = logits_2_disagree
+        labels_2_final = labels_disagree
+
+    loss_1_update = F.cross_entropy(logits_1_final, labels_1_final)
+    loss_2_update = F.cross_entropy(logits_2_final, labels_2_final)
+
+    return loss_1_update, loss_2_update, pure_ratio_1, pure_ratio_2
+
+
+def peer_learning_loss(logits_1, logits_2, logits_3, labels, forget_rate, ind, noise_or_not):
+    # 1 - 2
+    loss1_1to2, loss2_1to2, pure_ratio_1_1to2, pure_ratio_2_1to2 = peer_learning_loss_A2B(logits_1, logits_2, labels, forget_rate, ind, noise_or_not)
+
+    # 1 - 3
+    loss1_1to3, loss3_1to3, pure_ratio_1_1to3, pure_ratio_3_1to3 = peer_learning_loss_A2B(logits_1, logits_3, labels, forget_rate, ind, noise_or_not)
+
+    # 2 - 3
+    loss2_2to3, loss3_2to3, pure_ratio_2_2to3, pure_ratio_3_2to3 = peer_learning_loss_A2B(logits_2, logits_3, labels, forget_rate, ind, noise_or_not)
+
+    loss1 = (loss1_1to2 + loss1_1to3) / 2
+    loss2 = (loss2_1to2 + loss2_2to3) / 2
+    loss3 = (loss3_1to3 + loss3_2to3) / 2
+
+    pure_ratio_1 = (pure_ratio_1_1to2 + pure_ratio_1_1to3) / 2
+    pure_ratio_2 = (pure_ratio_2_1to2 + pure_ratio_2_2to3) / 2
+    pure_ratio_3 = (pure_ratio_3_1to3 + pure_ratio_3_2to3) / 2
+
+    return loss1, loss2, loss3, pure_ratio_1, pure_ratio_2, pure_ratio_3
+
